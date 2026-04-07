@@ -49,7 +49,11 @@
         var CodeUtil = require('../apijson/CodeUtil');
         var JSONObject = require('../apijson/JSONObject');
         var JSONResponse = require('../apijson/JSONResponse');
-        var JSONRequest = require('../apijson/JSONRequest');
+        var JSONRequest0 = require('../apijson/JSONRequest');
+        var JSONRequest = JSONRequest0.JSONRequest; // require('../apijson/JSONRequest');
+        var toFromData = JSONRequest0.toFromData;
+        var parseJSON = JSONRequest0.parseJSON;
+        var encode = JSONRequest0.encode;
         var localforage = require('./localforage.min');
         var clipboard = require('./clipboard.min');
         var jsonlint = require('./jsonlint');
@@ -339,7 +343,6 @@
         }
 
         return true
-
       }
 
 
@@ -1958,7 +1961,8 @@ https://github.com/Tencent/APIJSON/issues
             search: StringUtil.isEmpty(this.search, true) ? undefined : encodeURIComponent(this.search),
             testCaseSearch: StringUtil.isEmpty(this.testCaseSearch, true) ? undefined : this.testCaseSearch,
             randomSearch: StringUtil.isEmpty(this.randomSearch, true) ? undefined : encodeURIComponent(this.randomSearch),
-            randomSubSearch: StringUtil.isEmpty(this.randomSubSearch, true) ? undefined : encodeURIComponent(this.randomSubSearch)
+            randomSubSearch: StringUtil.isEmpty(this.randomSubSearch, true) ? undefined : encodeURIComponent(this.randomSubSearch),
+            tags: StringUtil.isEmpty(this.tags) ? undefined : encodeURIComponent(JSON.stringify(this.tags))
           })
         } catch (e) {
           log(e)
@@ -12123,7 +12127,7 @@ Content-Type: ` + contentType) + (StringUtil.isEmpty(headerStr, true) ? '' : hea
       },
 
       startRandomTest4Doc: function (list, indexes, position, deepAllCount, accountIndex, isCross) {
-        const accInd = accountIndex
+        const accInd = accountIndex || 0
         var callback = function (isRandom, allCount, msg) {
           log("startRandomTest4Doc  callback isRandom = " + isRandom + "; allCount = " + allCount + "; msg = " + msg)
           if (App.randomDoneCount < App.randomAllCount) {
@@ -12154,7 +12158,7 @@ Content-Type: ` + contentType) + (StringUtil.isEmpty(headerStr, true) ? '' : hea
               App.testRandomProcess = ''
               if (isCross) {
                 if (deepDoneCount == deepAllCount) {
-                  App.testAccountIndex = (App.testAccountIndex || 0) + 1
+                  App.testAccountIndex = accInd + 1 // (App.testAccountIndex || 0) + 1
                   App.test(false, App.testAccountIndex, isCross)
                 }
               } else {
@@ -12642,7 +12646,7 @@ Content-Type: ` + contentType) + (StringUtil.isEmpty(headerStr, true) ? '' : hea
         var curAccount = this.getCurrentAccount() || {}
         var accountIdStr = String(curAccount.isLoggedIn ? curAccount.id || '' : '')
         var tests = this.tests[accountIdStr] || {}
-        var currentResponse = (tests[isRandom ? random.documentId : document.id] || {})[
+        var currentResponse = item.data || (tests[isRandom ? random.documentId : document.id] || {})[
           isRandom ? (random.id > 0 ? random.id : (random.toId + '' + random.id)) : 0
         ]
 
@@ -13034,6 +13038,7 @@ Content-Type: ` + contentType) + (StringUtil.isEmpty(headerStr, true) ? '' : hea
         this.testCasePage = setting.testCasePage
         // this.randomCount = setting.randomCount
         this.randomPage = setting.randomPage
+        this.tags = setting.tags || this.tags
         this.server = 'http://localhost:8080' // this.getBaseUrl()
 
         // if (this.isCrossEnabled) {
@@ -13041,6 +13046,7 @@ Content-Type: ` + contentType) + (StringUtil.isEmpty(headerStr, true) ? '' : hea
         // }
 
         this.login(true, function (url, res, err) {
+          App.listScript()
           if (setting.isRandomShow && setting.isRandomListShow) {
             delayTime += Math.min(5000, (App.isMLEnabled ? 50 : 20) * (setting.randomCount || App.randomCount) + 1000)
             App.isRandomShow = true

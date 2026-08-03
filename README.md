@@ -303,7 +303,7 @@ https://github.com/TommyLemon/APIAuto/issues
 
 [APIJSON](https://github.com/Tencent/APIJSON) 🏆 腾讯实时 零代码、全功能、强安全 ORM 库 🚀 后端接口和文档零代码，前端(客户端) 定制返回 JSON 的数据和结构
 
-[AutoUI](https://github.com/TommyLemon/AutoUI) 📱 AI 零代码快准稳 UI 自动化测试平台 🚀 3 像素内精准定位，2 毫秒内精准等待，自动断言 UI 和数据、界定前/后端 bug
+[AutoUI](https://github.com/TommyLemon/AutoUI) 📱 AI 零代码快准稳 UI 自动化测试平台 🚀 3 像素内精准定位，2 毫秒内精准等待，自动断言 UI 和数据、界定前/后端 bug，用户包含腾讯，微信团队邀请分享
 
 [CVAuto](https://github.com/TommyLemon/CVAuto) 👁 零代码零标注 CV AI 自动化测试平台 🚀 免除大量人工画框和打标签等，直接快速测试 CV 计算机视觉 AI 图像识别算法
 
